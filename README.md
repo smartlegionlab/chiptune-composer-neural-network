@@ -5,7 +5,6 @@
 [![GitHub](https://img.shields.io/github/license/smartlegionlab/chiptune-composer-neural-network)](https://github.com/smartlegionlab/chiptune-composer-neural-network/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/smartlegionlab/chiptune-composer-neural-network?style=social)](https://github.com/smartlegionlab/chiptune-composer-neural-network/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/smartlegionlab/chiptune-composer-neural-network?style=social)](https://github.com/smartlegionlab/chiptune-composer-neural-network/network/members)
-
 ![Neural Network](https://img.shields.io/badge/neural%20network-MLP-00d2ff)
 ![From Scratch](https://img.shields.io/badge/from%20scratch-100%25-4fc3f7)
 ![Pure JavaScript](https://img.shields.io/badge/pure%20JavaScript-ES6-f7df1e)
@@ -14,21 +13,21 @@
 ![Live Generation](https://img.shields.io/badge/live-streaming-00e676)
 ![Model Export](https://img.shields.io/badge/model-export%20%2F%20import-00c853)
 
-An interactive **8-bit chiptune composer** driven by a from-scratch MLP plus a trainable harmony net, written **in pure JavaScript**. No frameworks, no libraries, no audio samples. Every note is synthesized live in the browser with the Web Audio API.
+An interactive **8-bit chiptune composer** driven by a from-scratch MLP plus a trainable harmony net, written **in pure JavaScript**. No frameworks, no libraries, no audio samples. Every note is synthesized live in the browser with the Web Audio API. Current version: **1.0.2**.
 
 ## Overview
 
-This standalone application implements the full training pipeline by hand - forward pass, error backpropagation, weight updates with gradient descent - and then composes a **structured song**: intro, verses, choruses, a calm bridge, a big finale and a fade-out ending.
-
-The main MLP (53 -> 48 -> 12) predicts the next pitch class and the groove for bass + drums. A second dedicated harmony net learns chord transitions from classic minor progressions: Am-F-C-G, Am-Dm-Em-Am, Am-G-F-E (Andalusian), Am-C-G-F and more.
+This standalone application implements the full training pipeline by hand - forward pass, error backpropagation, weight updates with gradient descent - and then composes a **structured song**: intro, verses, choruses, a calm bridge and a big finale. The main MLP (53 -> 48 -> 12) predicts the next pitch class and the groove for bass + drums. A second dedicated harmony net learns chord transitions from classic minor progressions: Am-F-C-G, Am-Dm-Em-Am, Am-G-F-E (Andalusian), Am-C-G-F and more.
 
 Each new track starts with a randomly chosen key, tempo and arrangement, and every 4-bar phrase resolves through the dominant (V7 - i) so the song always lands on proper cadences.
+
+Every track the composer plays is auto-saved to a **Track Playlist** (max 3, the 4th replaces the 1st): you can play/pause it, stop it, download it as .wav or delete it. Your own REC recordings stay separate.
 
 ## Features
 
 - Networks trained from scratch in plain JavaScript (sigmoid activation, backpropagation, mini-batch SGD with momentum).
 - Two networks: melody/groove MLP (53 -> 48 -> 12 + 4) and a harmony classifier (53 -> 16 -> 7 chord functions).
-- Song orchestrator: intro, verse, chorus, verse, bridge, final chorus, outro with fade-out.
+- Song orchestrator: intro, verse, chorus, verse, bridge, final chorus, outro.
 - Cadence grammar: every 4th bar resolves (V7 - i), the final bar lands on the tonic.
 - 12 minor keys with strictly diatonic chords (Am, Dm, Em, F#m, Bm and more).
 - Song composer that always stays in key and follows the chord progression.
@@ -36,6 +35,8 @@ Each new track starts with a randomly chosen key, tempo and arrangement, and eve
 - Native Web Audio engine: square and triangle voices plus noise drums, echo/delay feedback, low-pass, per-channel mutes, master volume.
 - Live visualization: pulsing neuron orbs, synapse lines, pitch-probability bars with scale degrees (1-7, x = off scale).
 - Record to .wav: capture a 16-bit PCM recording and download it.
+- Track Playlist: every composed track is auto-saved (max 3, oldest dropped); Play / Pause / Resume, Stop, Download or Delete. The composer and the playlist mute each other automatically.
+- Volume is fully under your control: only the **Master Volume** slider and **Mute All** change loudness, there is no automatic fade.
 - Model persistence: export/import the trained composer (including your examples) as JSON.
 - Responsive layout: 3-column panels on desktop/landscape, single column in portrait.
 - Built-in Help and About dialogs.
@@ -54,13 +55,14 @@ then open [http://localhost:8000](http://localhost:8000). Any static server work
 
 ### How to use
 
-1. Press **Play** - it unlocks Audio, the network decides a key and tempo, and composes a full structured song with a fade-out.
+1. Press **Play** - it unlocks Audio, the network decides a key and tempo, and composes a full structured song. Volume is controlled only by the **Master Volume** slider.
 2. **New Song** rolls another arrangement. **Loop** keeps generating new tracks forever.
-3. Note Pad: press **Rec**, click notes to play a beautiful melody, **Save Ex** adds it to the training set, **Learn Ex** teaches the network your style.
-4. Record your track: **REC** - **Stop** - **Download** (.wav); **Reset** clears.
-5. Adjust **Master Volume**, **Mute All / Unmute All** and each channel's own Mute (echo is shared by Lead, Arp and Lead2).
-6. Choose **Key**, **Tempo**, **Temperature**, **Lead Density**, **Model influence**, **Echo**.
-7. **Copy Stats** / **Export / Import** saves and loads the trained composer as JSON.
+3. Track Playlist: each track the composer plays is auto-saved here (max 3). **Play / Pause / Resume** to listen, **Stop** to end, **Download** to save as .wav, **Delete** to remove. The composer and the playlist mute each other automatically.
+4. Note Pad: press **Rec**, click notes to play a beautiful melody, **Save Ex** adds it to the training set, **Learn Ex** teaches the network your style.
+5. Record your track: **REC** - **Stop** - **Download** (.wav); **Reset** clears. REC recordings stay separate from the Track Playlist.
+6. Adjust **Master Volume**, **Mute All / Unmute All** and each channel's own Mute (echo is shared by Lead, Arp and Lead2).
+7. Choose **Key**, **Tempo**, **Temperature**, **Lead Density**, **Model influence**, **Echo**.
+8. **Copy Stats** / **Export / Import** saves and loads the trained composer as JSON.
 
 ## Architecture
 

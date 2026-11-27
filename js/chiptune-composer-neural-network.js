@@ -533,7 +533,7 @@ function updateStats() {
     var ap = accCache === null ? '-' : Math.round(accCache * 100) + '%';
     document.getElementById('trainStats').textContent = 'Epoch: ' + epoch + ' | Loss: ' + sm + ' | Top3: ' + ap + ' | Harm Tr: ' + (isNaN(harmTrain) ? '-' : Math.round(harmTrain * 100) + '%') + ' Val: ' + (isNaN(valHarm) ? '-' : Math.round(valHarm * 100) + '%') + '/' + (isNaN(valHarm2) ? '-' : Math.round(valHarm2 * 100) + '%');
     document.getElementById('lossStats').textContent = 'Current: ' + sm + ' | Best: ' + (bestLoss === Infinity ? '-' : bestLoss.toFixed(4));
-    document.getElementById('rawStats').textContent = 'Epoch=' + epoch + ' | Loss=' + sm + ' | Top3=' + ap + ' | HarmTr=' + (isNaN(harmTrain) ? '-' : Math.round(harmTrain * 100) + '%') + ' Val=' + (isNaN(valHarm) ? '-' : Math.round(valHarm * 100) + '%') + '/' + (isNaN(valHarm2) ? '-' : Math.round(valHarm2 * 100) + '%') + ' | Ex=' + exPool.length + ' | opt=' + nn.opt.toUpperCase() + ' | lr=' + nn.lr + ' | key=' + TONIC + ' | arch=53-48-12+r+h v1.0.1-d';
+    document.getElementById('rawStats').textContent = 'Epoch=' + epoch + ' | Loss=' + sm + ' | Top3=' + ap + ' | HarmTr=' + (isNaN(harmTrain) ? '-' : Math.round(harmTrain * 100) + '%') + ' Val=' + (isNaN(valHarm) ? '-' : Math.round(valHarm * 100) + '%') + '/' + (isNaN(valHarm2) ? '-' : Math.round(valHarm2 * 100) + '%') + ' | Ex=' + exPool.length + ' | opt=' + nn.opt.toUpperCase() + ' | lr=' + nn.lr + ' | key=' + TONIC + ' | arch=53-48-12+r+h v1.0.2';
 }
 function copyStats() {
     var txt = document.getElementById('rawStats').textContent;
@@ -607,7 +607,7 @@ function setOpt(name, btn) {
     showToast('Optimizer: ' + name.toUpperCase());
 }
 function exportModel() {
-    var data = { kind: 'chiptune-composer', arch: '53-48-12+r+h', ver: '1.0.1-d', key: TONIC, lr: nn.lr, opt: nn.opt, wIH: nn.wIH, wHO: nn.wHO, wRF: nn.wRF, wH1: nn.wH1, bH1: nn.bH1, wH2: nn.wH2, bH2: nn.bH2, bH: nn.bH, bO: nn.bO, bRF: nn.bRF, ex: exPool };
+    var data = { kind: 'chiptune-composer', arch: '53-48-12+r+h', ver: '1.0.2', key: TONIC, lr: nn.lr, opt: nn.opt, wIH: nn.wIH, wHO: nn.wHO, wRF: nn.wRF, wH1: nn.wH1, bH1: nn.bH1, wH2: nn.wH2, bH2: nn.bH2, bH: nn.bH, bO: nn.bO, bRF: nn.bRF, ex: exPool };
     var blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -1699,8 +1699,6 @@ function startPlayback() {
     delayNode.delayTime.value = stepDur * 3;
     setEcho();
     if (master) master.gain.setTargetAtTime(globalMuted ? 0 : masterVol / 100 * 0.9, actx.currentTime, 0.02);
-    var outSec = songPlan.sections[songPlan.barSection[songPlan.barCount - 1]];
-    if (outSec.name === 'Outro') master.gain.setTargetAtTime(0.02, actx.currentTime + totalSteps * stepDur * 0.9, totalSteps * stepDur * 0.45);
     histPc = [TONIC]; histMidi = [72]; lastLeadPc = TONIC; curLeadPC = -1; curBassPC = -1; curGroove = 0; bassCount = 0; roll = []; curStep = 0;
     nextTime = actx.currentTime + 0.15;
     playing = true;
@@ -1801,7 +1799,7 @@ function scheduleStep(step, t) {
     } else {
         leadMidi = histMidi.length ? histMidi[histMidi.length - 1] : 60;
     }
-    var fkT = sec.name === 'Outro' ? Math.max(0.05, 1 - stepInBar / 16 * 0.85) : 1;
+    var fkT = 1;
     var active = sec.mask;
     if (!mute[0] && active[0]) tone('square', freqFromMidi(leadMidi), t, stepDur * 0.9, chanLead, 0.10 * fkT);
     if (!mute[4] && active[4] && leadMidi > 36) tone('square', freqFromMidi(leadMidi - 12), t, stepDur * 0.9, chanLead2, 0.055 * fkT);
@@ -1882,7 +1880,7 @@ function startupTrain() {
     var ak = document.getElementById('autoKey');
     if (ak) ak.checked = false;
     genData();
-    log('init: arch=53-48-12+r+h v1.0.1-d key=' + TONIC + ' opt=' + nn.opt + ' lr=' + nn.lr);
+    log('init: arch=53-48-12+r+h v1.0.2 key=' + TONIC + ' opt=' + nn.opt + ' lr=' + nn.lr);
     function step() {
         for (var e = 0; e < 2 && epoch < RUN_EPOCHS; e++) trainOneEpoch();
         updateStats();
