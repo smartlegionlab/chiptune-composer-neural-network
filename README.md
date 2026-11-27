@@ -5,6 +5,7 @@
 [![GitHub](https://img.shields.io/github/license/smartlegionlab/chiptune-composer-neural-network)](https://github.com/smartlegionlab/chiptune-composer-neural-network/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/smartlegionlab/chiptune-composer-neural-network?style=social)](https://github.com/smartlegionlab/chiptune-composer-neural-network/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/smartlegionlab/chiptune-composer-neural-network?style=social)](https://github.com/smartlegionlab/chiptune-composer-neural-network/network/members)
+
 ![Neural Network](https://img.shields.io/badge/neural%20network-MLP-00d2ff)
 ![From Scratch](https://img.shields.io/badge/from%20scratch-100%25-4fc3f7)
 ![Pure JavaScript](https://img.shields.io/badge/pure%20JavaScript-ES6-f7df1e)
@@ -13,31 +14,31 @@
 ![Live Generation](https://img.shields.io/badge/live-streaming-00e676)
 ![Model Export](https://img.shields.io/badge/model-export%20%2F%20import-00c853)
 
-An interactive **8-bit chiptune composer** driven by a real multilayer perceptron (MLP) written **from scratch in pure JavaScript**. No frameworks, no libraries, no audio samples - every note is synthesized live in the browser with the Web Audio API.
-
----
+An interactive **8-bit chiptune composer** driven by a from-scratch MLP plus a trainable harmony net, written **in pure JavaScript**. No frameworks, no libraries, no audio samples. Every note is synthesized live in the browser with the Web Audio API.
 
 ## Overview
 
-This standalone application implements the full training pipeline by hand - forward pass, error backpropagation, weight updates with gradient descent - and then streams an endless, always-in-key chiptune melody with bass and drums. The network has **two shared-hidden heads**: it predicts the next pitch class and, per bar, one of four rhythm grooves for the bass + drums.
+This standalone application implements the full training pipeline by hand - forward pass, error backpropagation, weight updates with gradient descent - and then composes a **structured song**: intro, verses, choruses, a calm bridge, a big finale and a fade-out ending.
 
-Everything you hear is generated in real time. The neuron activation, weight magnitudes and the loss graph reflect the actual state of the network.
+The main MLP (53 -> 48 -> 12) predicts the next pitch class and the groove for bass + drums. A second dedicated harmony net learns chord transitions from classic minor progressions: Am-F-C-G, Am-Dm-Em-Am, Am-G-F-E (Andalusian), Am-C-G-F and more.
 
----
+Each new track starts with a randomly chosen key, tempo and arrangement, and every 4-bar phrase resolves through the dominant (V7 - i) so the song always lands on proper cadences.
 
-## Feature summary
+## Features
 
-- **Networks trained from scratch** in plain JavaScript (sigmoid activation, backpropagation, mini-batch SGD / Adam).
-- **Multi-head output** - one hidden layer, two heads: pitch class (12 notes) and rhythm groove (4 per bar).
-- **Native Web Audio engine** - square, triangle and noise voices, echo/delay feedback, low-pass, per-channel mutes and a master volume; no samples are loaded.
-- **Live streaming** - the composer runs forever, locked to the chosen key and a chord progression, with an on-screen note roll.
-- **Record to .wav** - capture the 16-bit PCM recording and download it.
-- **Live visualization** - neurons as pulsing orbs (brightness = activation), synapses by weight sign and magnitude, plus pitch-probability bars.
-- **Model persistence** - export / import the trained composer as a JSON file.
-- **Responsive layout** - 3-column panels on desktop/landscape, single column in portrait.
-- **Built-in Help and About** dialogs.
-
----
+- Networks trained from scratch in plain JavaScript (sigmoid activation, backpropagation, mini-batch SGD with momentum).
+- Two networks: melody/groove MLP (53 -> 48 -> 12 + 4) and a harmony classifier (53 -> 16 -> 7 chord functions).
+- Song orchestrator: intro, verse, chorus, verse, bridge, final chorus, outro with fade-out.
+- Cadence grammar: every 4th bar resolves (V7 - i), the final bar lands on the tonic.
+- 12 minor keys with strictly diatonic chords (Am, Dm, Em, F#m, Bm and more).
+- Song composer that always stays in key and follows the chord progression.
+- Note Pad: play a melody with the mouse, save it as a training example, and teach the network your style.
+- Native Web Audio engine: square and triangle voices plus noise drums, echo/delay feedback, low-pass, per-channel mutes, master volume.
+- Live visualization: pulsing neuron orbs, synapse lines, pitch-probability bars with scale degrees (1-7, x = off scale).
+- Record to .wav: capture a 16-bit PCM recording and download it.
+- Model persistence: export/import the trained composer (including your examples) as JSON.
+- Responsive layout: 3-column panels on desktop/landscape, single column in portrait.
+- Built-in Help and About dialogs.
 
 ## Getting started
 
@@ -53,24 +54,23 @@ then open [http://localhost:8000](http://localhost:8000). Any static server work
 
 ### How to use
 
-1. Press **Play** - it unlocks Audio and starts live composition.
-2. Record: **REC** → **Stop** → **Download** (.wav); **Reset** clears.
-3. Adjust **Master Volume** and **Mute All / Unmute All**; each channel has its own Mute.
-4. Choose **Key / Tempo / Temperature / Lead Density / Model influence / Echo**.
-5. The network picks the melody and a per-bar rhythm groove for bass and drums, locked to the key and a chord progression.
-6. **Copy Stats** / **Export / Import** saves and loads the trained composer as JSON.
-
----
+1. Press **Play** - it unlocks Audio, the network decides a key and tempo, and composes a full structured song with a fade-out.
+2. **New Song** rolls another arrangement. **Loop** keeps generating new tracks forever.
+3. Note Pad: press **Rec**, click notes to play a beautiful melody, **Save Ex** adds it to the training set, **Learn Ex** teaches the network your style.
+4. Record your track: **REC** - **Stop** - **Download** (.wav); **Reset** clears.
+5. Adjust **Master Volume**, **Mute All / Unmute All** and each channel's own Mute (echo is shared by Lead, Arp and Lead2).
+6. Choose **Key**, **Tempo**, **Temperature**, **Lead Density**, **Model influence**, **Echo**.
+7. **Copy Stats** / **Export / Import** saves and loads the trained composer as JSON.
 
 ## Architecture
 
-- **Network**: 53 inputs → 48 sigmoid hidden neurons → 12 pitch-class outputs + a rhythm head (4 grooves).
-- **Loss**: cross-entropy with softmax, trained by mini-batch SGD (momentum 0.9) or Adam, with weight decay and gradient/weight clipping.
-- **Melody**: generated from the network distribution blended with the chord/scale model and temperature-sampled, always staying in key.
+- Melody/groove MLP: 53 inputs -> 48 sigmoid hidden neurons -> 12 pitch-class outputs + 4 groove outputs.
+- Harmony MLP: 53 inputs -> 16 sigmoid hidden neurons -> 7 chord-function outputs, trained with label smoothing.
+- Loss: cross-entropy with softmax for all heads, mini-batch SGD (momentum 0.9), weight decay, gradient and weight clipping.
+- Features: last and previous note, chord root, chord tones, phrase position, scale mode and section context, all relative to the key so the model transposes.
+- Melody: generated from the network distribution blended with the chord/scale theory model and temperature-sampled, always staying in key.
 
-An educational demo of live music generation - every note is synthesized in the browser and the piece stays in key and follows a chord progression.
-
----
+An educational demo of live music generation - every note is synthesized in the browser and the piece stays in key, follows a chord progression and resolves with proper cadences.
 
 ## License
 

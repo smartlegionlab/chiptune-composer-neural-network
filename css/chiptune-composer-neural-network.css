@@ -7,8 +7,9 @@ html, body { margin: 0; }
 body { background: #0d1117; color: #e0e0e0; min-height: 100vh; padding: 20px; }
 .page { max-width: 1500px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; width: 100%; }
 .site-head { text-align: center; margin-bottom: 22px; max-width: 1000px; width: 100%; }
-.site-title { margin: 0 0 6px; font-size: 30px; font-weight: 800; color: #f8f9fa; }
-.site-title .hi { color: #0d6efd; }
+.site-title { margin: 0 0 6px; font-size: 30px; font-weight: 800; color: #0d6efd; }
+.site-title .hi { color: #f8f9fa; }
+.site-title .sup { color: #ffc107; font-size: 0.5em; vertical-align: super; margin-left: 8px; font-weight: 700; }
 .site-sub { color: #8b949e; font-size: 14px; margin: 0 0 14px; line-height: 1.5; }
 .head-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .head-btns button, .head-btns a {
@@ -64,6 +65,12 @@ button:active { transform: scale(.97); }
     box-shadow: 0 0 8px rgba(124, 77, 255, 0.5);
 }
 .lbl { color: #8b949e; font-size: 12px; white-space: nowrap; }
+.notepad { border: 1px solid rgba(13, 110, 253, 0.22); border-radius: 10px; padding: 8px; background: rgba(13, 17, 23, 0.4); display: flex; flex-direction: column; gap: 6px; }
+.np-head { display: flex; align-items: center; gap: 8px; }
+.np-keys { display: flex; gap: 3px; }
+.np-key { flex: 1; height: 46px; background: rgba(13, 110, 253, 0.18); color: #dfe6ee; border: 1px solid rgba(13, 110, 253, 0.4); border-radius: 5px; cursor: pointer; font-size: 9px; text-align: center; line-height: 46px; user-select: none; }
+.np-key:hover { background: rgba(13, 110, 253, 0.4); }
+.np-key.off { background: rgba(17, 22, 28, 0.6); color: #6b7280; border-color: rgba(90, 100, 110, 0.3); }
 .recbox { border: 1px solid rgba(13, 110, 253, 0.22); border-radius: 10px; padding: 8px; background: rgba(13, 17, 23, 0.4); display: flex; flex-direction: column; gap: 6px; }
 .rec-status { font-size: 13px; color: #8b949e; text-align: center; }
 .rec-time { font-size: 22px; font-weight: 800; color: #f8f9fa; text-align: center; font-variant-numeric: tabular-nums; }
@@ -137,4 +144,5 @@ select { width: 100%; padding: 6px 10px; background: rgba(13, 17, 23, 0.6); colo
     .workspace { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     .panel { padding: 12px; }
     .mutes { grid-template-columns: repeat(2, 1fr); }
+    .np-keys { flex-wrap: wrap; }
 }
