@@ -9,152 +9,163 @@
 </head>
 <body>
 <div class="page">
-<header class="site-head">
-    <h1 class="site-title">Chiptune Composer <span class="hi">Neural Network</span><sup class="sup">v1.0.1-a</sup></h1>
-    <p class="site-sub">Interactive machine learning. A from-scratch MLP (53 -&gt; 48 -&gt; 12 + rhythm + harmony). Compose a song live and teach it by playing examples on the Note Pad - it learns your taste.</p>
-    <div class="head-btns">
-        <a href="https://github.com/smartlegionlab/chiptune-composer-neural-network" target="_blank" rel="noopener">Repo</a>
-        <a href="https://smartlegionlab.github.io/interactive.html" target="_blank" rel="noopener">Projects</a>
-        <button type="button" onclick="openModal('helpModal')">? Help</button>
-        <button type="button" onclick="openModal('aboutModal')">About</button>
-    </div>
-</header>
-<div class="workspace">
-    <section class="panel">
-        <h3>1. Controls &amp; Track</h3>
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary" id="playBtn" onclick="togglePlay()">Play</button>
-            <button type="button" class="btn btn-info" onclick="newSong()">New Song</button>
-            <button type="button" class="btn btn-info" onclick="retrainNow()">Retrain</button>
+    <header class="site-head">
+        <h1 class="site-title">Chiptune Composer <span class="hi">Neural Network</span><sup class="sup">v1.0.1-a</sup></h1>
+        <p class="site-sub">Interactive machine learning. A from-scratch MLP (53 -&gt; 48 -&gt; 12 + rhythm + harmony). Compose a song live and teach it by playing examples on the Note Pad - it learns your taste.</p>
+        <div class="head-btns">
+            <a href="https://github.com/smartlegionlab/chiptune-composer-neural-network" target="_blank" rel="noopener">Repo</a>
+            <a href="https://smartlegionlab.github.io/interactive.html" target="_blank" rel="noopener">Projects</a>
+            <button type="button" onclick="openModal('helpModal')">? Help</button>
+            <button type="button" onclick="openModal('aboutModal')">About</button>
         </div>
-        <div class="btn-group" style="flex-wrap:nowrap;">
-            <label style="font-size:12px;color:#8b949e;display:inline-flex;align-items:center;gap:5px;flex:1 1 0;white-space:nowrap;padding:6px 8px;border:1px solid rgba(13,110,253,0.25);border-radius:8px;"><input type="checkbox" id="autoKey" checked onchange="setAuto(this.checked)" style="accent-color:#0d6efd;"> Auto key</label>
-            <label style="font-size:12px;color:#8b949e;display:inline-flex;align-items:center;gap:5px;flex:1 1 0;white-space:nowrap;padding:6px 8px;border:1px solid rgba(13,110,253,0.25);border-radius:8px;"><input type="checkbox" id="loopChk" style="accent-color:#0d6efd;"> Loop</label>
-        </div>
-        <div class="notepad">
-            <div class="np-head">
-                <span class="lbl">Note Pad (teach it)</span>
-                <div class="btn-group" style="flex:1 1 0;">
-                    <button type="button" class="rec-btn" id="npRecBtn" onclick="npRec()">Rec</button>
-                    <button type="button" class="btn btn-info" onclick="npSave()">Save Ex</button>
-                    <button type="button" class="btn btn-green" onclick="npLearn()">Learn Ex</button>
-                </div>
-            </div>
-            <div class="np-keys" id="npKeys"></div>
-            <div class="stats raw" id="npStats">examples: 0 | new: 0</div>
-        </div>
-        <div class="recbox">
+    </header>
+    <div class="workspace">
+        <section class="panel">
+            <h3>1. Controls &amp; Track</h3>
             <div class="btn-group">
-                <button type="button" class="rec-btn" id="recBtn" onclick="recStart()">REC</button>
-                <button type="button" class="stop-btn" id="recStopBtn" onclick="stopWav()" disabled>Stop</button>
-                <button type="button" class="dl-btn" id="recDlBtn" onclick="downloadWav()" disabled>Download</button>
-                <button type="button" class="reset-btn" onclick="clearWav()">Reset</button>
+                <button type="button" class="btn btn-primary" id="playBtn" onclick="togglePlay()">Play</button>
+                <button type="button" class="btn btn-info" onclick="newSong()">New Song</button>
+                <button type="button" class="btn btn-info" onclick="retrainNow()">Retrain</button>
             </div>
-            <div class="rec-status" id="recStatus">Ready to record</div>
-            <div class="rec-time" id="recTime">0:00</div>
-            <div class="rec-file" id="recFile"></div>
+            <div class="btn-group" style="flex-wrap:nowrap;">
+                <label style="font-size:12px;color:#8b949e;display:inline-flex;align-items:center;gap:5px;flex:1 1 0;white-space:nowrap;padding:6px 8px;border:1px solid rgba(13,110,253,0.25);border-radius:8px;"><input type="checkbox" id="autoKey" checked onchange="setAuto(this.checked)" style="accent-color:#0d6efd;"> Auto key</label>
+                <label style="font-size:12px;color:#8b949e;display:inline-flex;align-items:center;gap:5px;flex:1 1 0;white-space:nowrap;padding:6px 8px;border:1px solid rgba(13,110,253,0.25);border-radius:8px;"><input type="checkbox" id="loopChk" style="accent-color:#0d6efd;"> Loop</label>
+            </div>
+            <div class="notepad">
+                <div class="np-head">
+                    <span class="lbl">Note Pad (teach it)</span>
+                    <div class="btn-group" style="flex:1 1 0;">
+                        <button type="button" class="rec-btn" id="npRecBtn" onclick="npRec()">Rec</button>
+                        <button type="button" class="btn btn-info" onclick="npSave()">Save Ex</button>
+                        <button type="button" class="btn btn-green" onclick="npLearn()">Learn Ex</button>
+                    </div>
+                </div>
+                <div class="np-keys" id="npKeys"></div>
+                <div class="stats raw" id="npStats">examples: 0 | new: 0</div>
+            </div>
+            <div class="recbox">
+                <div class="btn-group">
+                    <button type="button" class="rec-btn" id="recBtn" onclick="recStart()">REC</button>
+                    <button type="button" class="stop-btn" id="recStopBtn" onclick="stopWav()" disabled>Stop</button>
+                    <button type="button" class="dl-btn" id="recDlBtn" onclick="downloadWav()" disabled>Download</button>
+                    <button type="button" class="reset-btn" onclick="clearWav()">Reset</button>
+                </div>
+                <div class="rec-status" id="recStatus">Ready to record</div>
+                <div class="rec-time" id="recTime">0:00</div>
+                <div class="rec-file" id="recFile"></div>
+            </div>
+            <div class="plbox">
+    <div class="pl-head">
+            <span class="lbl">Track Playlist</span>
+            <span style="display:inline-flex;align-items:center;gap:8px;">
+                <button type="button" class="btn btn-info" onclick="plStop()">Stop</button>
+                <b id="plCount">0/3</b>
+            </span>
         </div>
-        <div class="slider">
-            <label>Master Volume <b id="volVal">90</b></label>
-            <input type="range" id="volSlider" min="0" max="100" value="90" oninput="setMaster()">
-        </div>
-        <button type="button" class="btn btn-primary btn-block" id="muteAllBtn" onclick="toggleMaster()">Mute All</button>
-        <div class="slider">
-            <label>Key / Tonality <b id="keyName">A minor</b></label>
-            <select id="keySelect" onchange="setKey(+this.value)">
-                <option value="9">A minor</option>
-                <option value="0">C minor</option>
-                <option value="2">D minor</option>
-                <option value="4">E minor</option>
-                <option value="5">F minor</option>
-                <option value="7">G minor</option>
-            </select>
-        </div>
-        <div class="slider">
-            <label>Tempo (BPM) <b id="bpmVal">96</b></label>
-            <input type="range" id="bpmSlider" min="40" max="220" value="96" oninput="bpmVal.textContent=this.value">
-        </div>
-        <div class="slider">
-            <label>Temperature <b id="tempVal">1.10</b></label>
-            <input type="range" id="tempSlider" min="0.3" max="1.8" step="0.05" value="1.1" oninput="tempVal.textContent=Number(this.value).toFixed(2)">
-        </div>
-        <div class="slider">
-            <label>Lead Density <b id="densityVal">100</b></label>
-            <input type="range" id="densitySlider" min="0" max="100" value="100" oninput="densityVal.textContent=this.value">
-        </div>
-        <div class="slider">
-            <label>Model influence <b id="modelVal">0.30</b></label>
-            <input type="range" id="modelSlider" min="0" max="1" step="0.05" value="0.3" oninput="modelVal.textContent=Number(this.value).toFixed(2)">
-        </div>
-        <div class="slider">
-            <label>Echo / Delay <b id="echoVal">30</b></label>
-            <input type="range" id="echoSlider" min="0" max="100" value="30" oninput="setEcho()">
-        </div>
-        <div class="mutes">
-            <button type="button" class="mute on" data-ch="0" onclick="toggleMute(0)">Lead<span class="d">square + echo</span></button>
-            <button type="button" class="mute on" data-ch="1" onclick="toggleMute(1)">Arp<span class="d">square</span></button>
-            <button type="button" class="mute on" data-ch="2" onclick="toggleMute(2)">Bass<span class="d">triangle</span></button>
-            <button type="button" class="mute on" data-ch="3" onclick="toggleMute(3)">Drums<span class="d">noise</span></button>
-            <button type="button" class="mute on" data-ch="4" onclick="toggleMute(4)">Lead 2<span class="d">octave</span></button>
-            <button type="button" class="mute on" data-ch="5" onclick="toggleMute(5)">Pad<span class="d">chord</span></button>
-        </div>
-        <div class="canvas-area"><canvas id="trackCanvas" width="620" height="220"></canvas></div>
-        <div class="legend">
-            <span><i style="background:#0d6efd"></i>Lead</span>
-            <span><i style="background:#58a6ff"></i>Arp</span>
-            <span><i style="background:#f0ad4e"></i>Bass</span>
-            <span><i style="background:#ff7b3a"></i>Drums</span>
-            <span><i style="background:#2ee6a8"></i>Lead2</span>
-            <span><i style="background:#b388ff"></i>Pad</span>
-        </div>
-        <div class="bars" id="barsWrap"></div>
-    </section>
-    <section class="panel">
-        <h3>2. Network Brain (53 → 48 → 12+r+h)</h3>
-        <div class="canvas-area">
-            <canvas id="netCanvas" width="640" height="540"></canvas>
-        </div>
-        <div class="stats" id="trainStats">Epoch: 0 | Loss: - | Top3: - | Harm: -</div>
-        <div class="stats raw" id="rawStats" title="Click to copy" onclick="copyStats()"></div>
-        <div class="hint">green ring follows the note being played (x = off scale)</div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary" id="trainBtn" onclick="toggleTrain()">Start Training</button>
-            <button type="button" class="btn btn-green" onclick="trainEpochs(300)">Fast Learn</button>
-            <button type="button" class="btn btn-red" onclick="resetNetwork()">Reset</button>
-        </div>
-        <div class="btn-group">
-            <span class="lbl">opt</span>
-            <button type="button" class="opt-btn" data-opt="adam" onclick="setOpt('adam',this)">Adam</button>
-            <button type="button" class="opt-btn active" data-opt="sgd" onclick="setOpt('sgd',this)">SGD</button>
-            <span class="lbl">lr</span>
-            <button type="button" class="lr-btn" data-lr="0.3" onclick="setLR(0.3,this)">Med</button>
-            <button type="button" class="lr-btn active" data-lr="0.2" onclick="setLR(0.2,this)">Precise</button>
-            <button type="button" class="lr-btn" data-lr="0.6" onclick="setLR(0.6,this)">Fast</button>
-        </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-info" onclick="exportModel()">Export</button>
-            <button type="button" class="btn btn-info" onclick="importModel()">Import</button>
-            <button type="button" class="btn btn-info" onclick="copyStats()">Copy Stats</button>
-        </div>
-        <input type="file" id="modelFile" accept="application/json" style="display:none" onchange="onImportFile(event)">
-        <div class="toast" id="toast"></div>
-    </section>
-    <section class="panel">
-        <h3>3. Learning Curve &amp; Watch</h3>
-        <div class="canvas-area"><canvas id="lossCanvas" width="300" height="170"></canvas></div>
-        <div class="status-box" id="statusBox">
-            <div class="s-row"><span>Key</span><b id="sKey">A minor</b></div>
-            <div class="s-row"><span>Tempo</span><b id="sTempo">-</b></div>
-            <div class="s-row"><span>Section</span><b id="sSection">-</b></div>
-            <div class="s-row"><span>Bar / Groove</span><b id="sBar">-</b></div>
-            <div class="s-row"><span>Chord</span><b id="sChord">-</b></div>
-            <div class="s-row"><span>Lead / Bass</span><b id="sNotes">-</b></div>
-        </div>
-        <div class="canvas-area"><canvas id="distCanvas" width="300" height="120"></canvas></div>
-        <div class="stats" id="lossStats">Current: - | Best: -</div>
-        <div class="hint">scale degrees 1-7, x = off scale</div>
-    </section>
-</div>
+        <div id="plList"></div>
+        <div class="pl-hint">Each track the composer plays is auto-saved here (max 3). Play / Pause to listen, Stop to end. The composer and playlist mute each other automatically.</div>
+    </div>
+            <div class="slider">
+                <label>Master Volume <b id="volVal">90</b></label>
+                <input type="range" id="volSlider" min="0" max="100" value="90" oninput="setMaster()">
+            </div>
+            <button type="button" class="btn btn-primary btn-block" id="muteAllBtn" onclick="toggleMaster()">Mute All</button>
+            <div class="slider">
+                <label>Key / Tonality <b id="keyName">A minor</b></label>
+                <select id="keySelect" onchange="setKey(+this.value)">
+                    <option value="9">A minor</option>
+                    <option value="0">C minor</option>
+                    <option value="2">D minor</option>
+                    <option value="4">E minor</option>
+                    <option value="5">F minor</option>
+                    <option value="7">G minor</option>
+                </select>
+            </div>
+            <div class="slider">
+                <label>Tempo (BPM) <b id="bpmVal">96</b></label>
+                <input type="range" id="bpmSlider" min="40" max="220" value="96" oninput="bpmVal.textContent=this.value">
+            </div>
+            <div class="slider">
+                <label>Temperature <b id="tempVal">1.10</b></label>
+                <input type="range" id="tempSlider" min="0.3" max="1.8" step="0.05" value="1.1" oninput="tempVal.textContent=Number(this.value).toFixed(2)">
+            </div>
+            <div class="slider">
+                <label>Lead Density <b id="densityVal">100</b></label>
+                <input type="range" id="densitySlider" min="0" max="100" value="100" oninput="densityVal.textContent=this.value">
+            </div>
+            <div class="slider">
+                <label>Model influence <b id="modelVal">0.30</b></label>
+                <input type="range" id="modelSlider" min="0" max="1" step="0.05" value="0.3" oninput="modelVal.textContent=Number(this.value).toFixed(2)">
+            </div>
+            <div class="slider">
+                <label>Echo / Delay <b id="echoVal">30</b></label>
+                <input type="range" id="echoSlider" min="0" max="100" value="30" oninput="setEcho()">
+            </div>
+            <div class="mutes">
+                <button type="button" class="mute on" data-ch="0" onclick="toggleMute(0)">Lead<span class="d">square + echo</span></button>
+                <button type="button" class="mute on" data-ch="1" onclick="toggleMute(1)">Arp<span class="d">square</span></button>
+                <button type="button" class="mute on" data-ch="2" onclick="toggleMute(2)">Bass<span class="d">triangle</span></button>
+                <button type="button" class="mute on" data-ch="3" onclick="toggleMute(3)">Drums<span class="d">noise</span></button>
+                <button type="button" class="mute on" data-ch="4" onclick="toggleMute(4)">Lead 2<span class="d">octave</span></button>
+                <button type="button" class="mute on" data-ch="5" onclick="toggleMute(5)">Pad<span class="d">chord</span></button>
+            </div>
+            <div class="canvas-area"><canvas id="trackCanvas" width="620" height="220"></canvas></div>
+            <div class="legend">
+                <span><i style="background:#0d6efd"></i>Lead</span>
+                <span><i style="background:#58a6ff"></i>Arp</span>
+                <span><i style="background:#f0ad4e"></i>Bass</span>
+                <span><i style="background:#ff7b3a"></i>Drums</span>
+                <span><i style="background:#2ee6a8"></i>Lead2</span>
+                <span><i style="background:#b388ff"></i>Pad</span>
+            </div>
+            <div class="bars" id="barsWrap"></div>
+        </section>
+        <section class="panel">
+            <h3>2. Network Brain (53 → 48 → 12+r+h)</h3>
+            <div class="canvas-area">
+                <canvas id="netCanvas" width="640" height="540"></canvas>
+            </div>
+            <div class="stats" id="trainStats">Epoch: 0 | Loss: - | Top3: - | Harm: -</div>
+            <div class="stats raw" id="rawStats" title="Click to copy" onclick="copyStats()"></div>
+            <div class="hint">green ring follows the note being played (x = off scale)</div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="trainBtn" onclick="toggleTrain()">Start Training</button>
+                <button type="button" class="btn btn-green" onclick="trainEpochs(300)">Fast Learn</button>
+                <button type="button" class="btn btn-red" onclick="resetNetwork()">Reset</button>
+            </div>
+            <div class="btn-group">
+                <span class="lbl">opt</span>
+                <button type="button" class="opt-btn" data-opt="adam" onclick="setOpt('adam',this)">Adam</button>
+                <button type="button" class="opt-btn active" data-opt="sgd" onclick="setOpt('sgd',this)">SGD</button>
+                <span class="lbl">lr</span>
+                <button type="button" class="lr-btn" data-lr="0.3" onclick="setLR(0.3,this)">Med</button>
+                <button type="button" class="lr-btn active" data-lr="0.2" onclick="setLR(0.2,this)">Precise</button>
+                <button type="button" class="lr-btn" data-lr="0.6" onclick="setLR(0.6,this)">Fast</button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info" onclick="exportModel()">Export</button>
+                <button type="button" class="btn btn-info" onclick="importModel()">Import</button>
+                <button type="button" class="btn btn-info" onclick="copyStats()">Copy Stats</button>
+            </div>
+            <input type="file" id="modelFile" accept="application/json" style="display:none" onchange="onImportFile(event)">
+            <div class="toast" id="toast"></div>
+        </section>
+        <section class="panel">
+            <h3>3. Learning Curve &amp; Watch</h3>
+            <div class="canvas-area"><canvas id="lossCanvas" width="300" height="170"></canvas></div>
+            <div class="status-box" id="statusBox">
+                <div class="s-row"><span>Key</span><b id="sKey">A minor</b></div>
+                <div class="s-row"><span>Tempo</span><b id="sTempo">-</b></div>
+                <div class="s-row"><span>Section</span><b id="sSection">-</b></div>
+                <div class="s-row"><span>Bar / Groove</span><b id="sBar">-</b></div>
+                <div class="s-row"><span>Chord</span><b id="sChord">-</b></div>
+                <div class="s-row"><span>Lead / Bass</span><b id="sNotes">-</b></div>
+            </div>
+            <div class="canvas-area"><canvas id="distCanvas" width="300" height="120"></canvas></div>
+            <div class="stats" id="lossStats">Current: - | Best: -</div>
+            <div class="hint">scale degrees 1-7, x = off scale</div>
+        </section>
+    </div>
 </div>
 <div class="modal-overlay" id="helpModal">
     <div class="modal">
@@ -163,6 +174,7 @@
         <ol>
             <li><b class="accent">Play</b> composes a whole song: intro, verses, choruses, bridge, finale, fade-out. Auto key picks the tonality; Genre sets the mood.</li>
             <li><b class="accent">New Song</b> rolls a new arrangement. <b class="accent">Loop</b> keeps going forever.</li>
+            <li>Track Playlist: every track the composer plays is auto-saved (max 3); listen, download or delete. Your <b class="accent">REC</b> recordings stay separate.</li>
             <li>Note Pad: press <b class="accent">Rec</b>, click notes to play a beautiful melody, <b class="accent">Save Ex</b> adds it to training, <b class="accent">Learn Ex</b> teaches the network your style.</li>
             <li>Record your track: <b class="accent">REC</b> - <b class="accent">Stop</b> - <b class="accent">Download</b> (.wav); <b class="accent">Reset</b> clears.</li>
             <li>Key, Tempo, Temperature, Lead Density, Model influence, Echo; each channel has Mute.</li>
