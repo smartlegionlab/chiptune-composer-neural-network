@@ -16,9 +16,17 @@
 
 An interactive **8-bit chiptune composer** driven by a from-scratch MLP plus a trainable harmony net, written **in pure JavaScript**. No frameworks, no libraries, no audio samples. Every note is synthesized live in the browser with the Web Audio API. Current version: **1.0.2**.
 
+---
+
 ## Demo
 
 Listen to a pre-composed chiptune sample: **[data/audio/example.mp3](data/audio/example.mp3)**.
+
+Try the live composer: **[Chiptune Composer Neural Network](https://smartlegionlab.github.io/interactive/chiptune-composer-neural-network.html)** (or serve the repo locally, see Getting started below).
+
+![Chiptune Composer Neural Network](data/images/chiptune-composer-neural-network.png)
+
+---
 
 ## Overview
 
@@ -27,6 +35,8 @@ This standalone application implements the full training pipeline by hand - forw
 Each new track starts with a randomly chosen key, tempo and arrangement, and every 4-bar phrase resolves through the dominant (V7 - i) so the song always lands on proper cadences.
 
 Every track the composer plays is auto-saved to a **Track Playlist** (max 3, the 4th replaces the 1st): you can play/pause it, stop it, download it as .wav or delete it. Your own REC recordings stay separate.
+
+---
 
 ## Features
 
@@ -45,6 +55,8 @@ Every track the composer plays is auto-saved to a **Track Playlist** (max 3, the
 - Model persistence: export/import the trained composer (including your examples) as JSON.
 - Responsive layout: 3-column panels on desktop/landscape, single column in portrait.
 - Built-in Help and About dialogs.
+
+---
 
 ## Getting started
 
@@ -69,6 +81,8 @@ then open [http://localhost:8000](http://localhost:8000). Any static server work
 7. Choose **Key**, **Tempo**, **Temperature**, **Lead Density**, **Model influence**, **Echo**.
 8. **Copy Stats** / **Export / Import** saves and loads the trained composer as JSON.
 
+---
+
 ## Architecture
 
 - Melody/groove MLP: 53 inputs -> 48 sigmoid hidden neurons -> 12 pitch-class outputs + 4 groove outputs.
@@ -78,6 +92,27 @@ then open [http://localhost:8000](http://localhost:8000). Any static server work
 - Melody: generated from the network distribution blended with the chord/scale theory model and temperature-sampled, always staying in key.
 
 An educational demo of live music generation - every note is synthesized in the browser and the piece stays in key, follows a chord progression and resolves with proper cadences.
+
+---
+
+## Ecosystem
+
+This project is part of the **Smart Legion Lab** from-scratch neural-network ecosystem - a collection of eight independent demos in pure JavaScript, each with live visualization, model export/import, a responsive 3-column layout and built-in Help/About dialogs. Every app lives in its own standalone repository; the collection page is [from-scratch-neural-networks](https://github.com/smartlegionlab/from-scratch-neural-networks) with the full index at [interactive.html](https://smartlegionlab.github.io/interactive.html).
+
+| # | Project                       | Network          | Learns                       | Repository                                                                                                       | Live demo                                                                                         |
+|---|-------------------------------|------------------|------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| 1 | Boolean-Logic Neural Network  | 2 → 3 → 1        | XOR / AND / OR / NAND / XNOR | [logic-gates-neural-network](https://github.com/smartlegionlab/logic-gates-neural-network)                       | [try it](https://smartlegionlab.github.io/interactive/logic-gates-neural-network.html)            |
+| 2 | Handwritten-Digit Recognition | 144 → 24 → 10    | Handwritten digits 0-9       | [digit-recognition-neural-network](https://github.com/smartlegionlab/digit-recognition-neural-network)           | [try it](https://smartlegionlab.github.io/interactive/digit-recognition-neural-network.html)      |
+| 3 | X / O Shape Recognition       | 64 → 12 → 2      | The letters X and O          | [x-o-recognition-neural-network](https://github.com/smartlegionlab/x-o-recognition-neural-network)               | [try it](https://smartlegionlab.github.io/interactive/x-o-recognition-neural-network.html)        |
+| 4 | Name Gender Classifier        | 2,746 → 48 → 1   | Gender from RU/EN names      | [name-gender-classifier-neural-network](https://github.com/smartlegionlab/name-gender-classifier-neural-network) | [try it](https://smartlegionlab.github.io/interactive/name-gender-classifier-neural-network.html) |
+| 5 | Chiptune Composer             | 53 → 48 → 12+r   | Compose 8-bit chiptune live  | [chiptune-composer-neural-network](https://github.com/smartlegionlab/chiptune-composer-neural-network)           | [try it](https://smartlegionlab.github.io/interactive/chiptune-composer-neural-network.html)      |
+| 6 | RGB Color Name Guesser        | 3 → 24 → 12      | Names any RGB color          | [rgb-color-name-guesser-neural-network](https://github.com/smartlegionlab/rgb-color-name-guesser-neural-network) | [try it](https://smartlegionlab.github.io/interactive/rgb-color-name-guesser-neural-network.html) |
+| 7 | Morse Decoder                 | 10 → 16 → 36     | Morse code A-Z and 0-9       | [morse-decoder-neural-network](https://github.com/smartlegionlab/morse-decoder-neural-network)                   | [try it](https://smartlegionlab.github.io/interactive/morse-decoder-neural-network.html)          |
+| 8 | Tic-Tac-Toe Brain             | 27 → 48 → 32 → 9 | Perfect Tic-Tac-Toe play     | [tic-tac-toe-brain-neural-network](https://github.com/smartlegionlab/tic-tac-toe-brain-neural-network)           | [try it](https://smartlegionlab.github.io/interactive/tic-tac-toe-brain-neural-network.html)      |
+
+Each app is served the same way: run a local server (`python -m http.server 8000`) or open the GitHub Pages demo link above; no build step and no internet connection required.
+
+---
 
 ## License
 
