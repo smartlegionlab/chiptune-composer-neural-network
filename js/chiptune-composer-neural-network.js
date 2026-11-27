@@ -975,7 +975,7 @@ function drawTrack() {
 }
 var actx = null, master, chanLead, chanArp, chanBass, chanDrum, chanLead2, chanPad;
 var leadDry, echoSend, delayNode, feedbackGain, lowpass, echoOut, noiseBuffer = null;
-var playing = false, schedulerId = 0, stepDur = 0, nextTime = 0, mute = [false, false, false, false, false, false], bassCount = 0;
+var playing = false, schedulerId = 0, stepDur = 0, nextTime = 0, mute = [false, false, false, false, false, false], bassCount = 0, tailTimer = 0;
 var wavRec = false, wavSamples = [], recNode = null, recMonitor = null, wavStartT = 0, wavTimer = 0, wavDur = 0, wavBlob = null, wavReady = false;
 var exPool = [], npPending = [], exNew = 0, npRecOn = false;
 var playlist = [], plSeq = 0, plAudio = null, plItem = null, plCurrent = -1, plPlaying = false, autoRecOn = false, autoSamples = [], autoNode = null, autoStartT = 0, liveTones = [], songLive = false;
@@ -1692,6 +1692,8 @@ function buildSong() {
 function startPlayback() {
     buildAudio();
     if (actx.state === 'suspended') actx.resume();
+    if (tailTimer) { clearTimeout(tailTimer); tailTimer = 0; }
+    autoRecStop();
     stopPlPlayback();
     cancelLiveTones();
     songLive = true;
@@ -1745,6 +1747,7 @@ function newSong() {
 function endSong() {
     playing = false;
     clearInterval(schedulerId);
+    if (tailTimer) { clearTimeout(tailTimer); tailTimer = 0; }
     autoRecStop();
     songLive = false;
     cancelLiveTones();
@@ -1765,7 +1768,13 @@ function tick() {
         scheduleStep(curStep, nextTime);
         curStep++;
         nextTime += stepDur;
-        if (curStep >= totalSteps) { endSong(); return; }
+        if (curStep >= totalSteps) {
+            playing = false;
+            clearInterval(schedulerId);
+            var tail = Math.max(stepDur * 8, 0.9);
+            tailTimer = setTimeout(endSong, tail * 1000);
+            return;
+        }
     }
 }
 function scheduleStep(step, t) {

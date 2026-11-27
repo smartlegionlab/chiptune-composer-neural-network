@@ -12,8 +12,13 @@
 ![8-bit Chiptune](https://img.shields.io/badge/music-8--bit%20chiptune-ff7043)
 ![Live Generation](https://img.shields.io/badge/live-streaming-00e676)
 ![Model Export](https://img.shields.io/badge/model-export%20%2F%20import-00c853)
+![Demo Audio](https://img.shields.io/badge/demo-audio-9cf)
 
 An interactive **8-bit chiptune composer** driven by a from-scratch MLP plus a trainable harmony net, written **in pure JavaScript**. No frameworks, no libraries, no audio samples. Every note is synthesized live in the browser with the Web Audio API. Current version: **1.0.2**.
+
+## Demo
+
+Listen to a pre-composed chiptune sample: **[data/audio/example.mp3](data/audio/example.mp3)**.
 
 ## Overview
 

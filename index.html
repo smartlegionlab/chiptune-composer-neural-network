@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chiptune Composer Neural Network</title>
-    <meta name="description" content="Chiptune Composer Neural Network v1.0.1-a. A from-scratch MLP (53 -> 48 -> 12 + rhythm + harmony) in pure JavaScript with an interactive instrument panel: you play, it learns your melodies.">
+    <meta name="description" content="Chiptune Composer Neural Network v1.0.2. A from-scratch MLP (53 -> 48 -> 12 + rhythm + harmony) in pure JavaScript with an interactive instrument panel: you play, it learns your melodies.">
     <link rel="stylesheet" href="css/chiptune-composer-neural-network.css">
 </head>
 <body>
 <div class="page">
     <header class="site-head">
-        <h1 class="site-title">Chiptune Composer <span class="hi">Neural Network</span><sup class="sup">v1.0.1-a</sup></h1>
+        <h1 class="site-title">Chiptune Composer <span class="hi">Neural Network</span><sup class="sup">v1.0.2</sup></h1>
         <p class="site-sub">Interactive machine learning. A from-scratch MLP (53 -&gt; 48 -&gt; 12 + rhythm + harmony). Compose a song live and teach it by playing examples on the Note Pad - it learns your taste.</p>
         <div class="head-btns">
             <a href="https://github.com/smartlegionlab/chiptune-composer-neural-network" target="_blank" rel="noopener">Repo</a>
@@ -55,16 +55,16 @@
                 <div class="rec-file" id="recFile"></div>
             </div>
             <div class="plbox">
-    <div class="pl-head">
-            <span class="lbl">Track Playlist</span>
-            <span style="display:inline-flex;align-items:center;gap:8px;">
-                <button type="button" class="btn btn-info" onclick="plStop()">Stop</button>
-                <b id="plCount">0/3</b>
-            </span>
-        </div>
-        <div id="plList"></div>
-        <div class="pl-hint">Each track the composer plays is auto-saved here (max 3). Play / Pause to listen, Stop to end. The composer and playlist mute each other automatically.</div>
-    </div>
+                <div class="pl-head">
+                    <span class="lbl">Track Playlist</span>
+                    <span style="display:inline-flex;align-items:center;gap:8px;">
+                        <button type="button" class="btn btn-info" onclick="plStop()">Stop</button>
+                        <b id="plCount">0/3</b>
+                    </span>
+                </div>
+                <div id="plList"></div>
+                <div class="pl-hint">Each track the composer plays is auto-saved here (max 3). Play / Pause to listen, Stop to end. The composer and playlist mute each other automatically.</div>
+            </div>
             <div class="slider">
                 <label>Master Volume <b id="volVal">90</b></label>
                 <input type="range" id="volSlider" min="0" max="100" value="90" oninput="setMaster()">
@@ -172,12 +172,12 @@
         <button type="button" class="modal-close" onclick="closeModal(this)">&#10005;</button>
         <h3>How to Use</h3>
         <ol>
-            <li><b class="accent">Play</b> composes a whole song: intro, verses, choruses, bridge, finale, fade-out. Auto key picks the tonality; Genre sets the mood.</li>
+            <li><b class="accent">Play</b> composes a whole song: intro, verses, choruses, bridge and finale. Auto key picks the tonality; Genre sets the mood.</li>
             <li><b class="accent">New Song</b> rolls a new arrangement. <b class="accent">Loop</b> keeps going forever.</li>
-            <li>Track Playlist: every track the composer plays is auto-saved (max 3); listen, download or delete. Your <b class="accent">REC</b> recordings stay separate.</li>
+            <li>Track Playlist: every track the composer plays is auto-saved (max 3). <b class="accent">Play / Pause</b> to listen, <b class="accent">Stop</b> to end, <b class="accent">Download</b> or <b class="accent">Delete</b>. The composer and the playlist mute each other automatically. Your <b class="accent">REC</b> recordings stay separate.</li>
             <li>Note Pad: press <b class="accent">Rec</b>, click notes to play a beautiful melody, <b class="accent">Save Ex</b> adds it to training, <b class="accent">Learn Ex</b> teaches the network your style.</li>
             <li>Record your track: <b class="accent">REC</b> - <b class="accent">Stop</b> - <b class="accent">Download</b> (.wav); <b class="accent">Reset</b> clears.</li>
-            <li>Key, Tempo, Temperature, Lead Density, Model influence, Echo; each channel has Mute.</li>
+            <li>Key, Tempo, Temperature, Lead Density, Model influence, Echo; each channel has Mute. Volume is controlled only by the Master Volume slider.</li>
             <li><b class="accent">Copy Stats</b> / <b class="accent">Export / Import</b>.</li>
         </ol>
     </div>
@@ -186,10 +186,10 @@
     <div class="modal">
         <button type="button" class="modal-close" onclick="closeModal(this)">&#10005;</button>
         <h3>About</h3>
-        <div class="ab-head"><div class="ab-name">Chiptune Composer Neural Network</div><div class="ab-ver">version 1.0.1</div></div>
+        <div class="ab-head"><div class="ab-name">Chiptune Composer Neural Network</div><div class="ab-ver">version 1.0.3</div></div>
         <p>A from-scratch MLP (53 -&gt; 48 -&gt; 12 + rhythm + harmony) in pure JavaScript. No libraries, no samples.</p>
         <p>It learns chord progressions, rhythm grooves and melodic taste. The Note Pad lets you play examples with the mouse and teach it your style, just like in the X/O and Morse demos.</p>
-        <p>Every Play builds a structured track: intro, verses, choruses, a calm bridge, a big finale and a fade-out - synthesized live with the Web Audio API and recordable to 16-bit PCM .wav.</p>
+        <p>Every Play builds a structured track: intro, verses, choruses, a calm bridge and a big finale - synthesized live with the Web Audio API and recordable to 16-bit PCM .wav. Tracks you hear are auto-saved to the Track Playlist, and each song ends cleanly on the last beat with its echo.</p>
         <div class="ab-meta">
             <div><b>Author:</b> Alexander Suvorov</div>
             <div><b>License:</b> BSD 3-Clause</div>
